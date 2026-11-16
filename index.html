@@ -230,6 +230,7 @@ document.getElementById('metaBar').innerHTML=
   '<span class="f">国家 <b>'+D.meta.country+'</b></span>'+
   '<span class="f">业务组 <b>'+D.meta.biz+'</b></span>'+
   '<span class="f">口径日 <b>'+D.meta.rd+'</b></span>'+
+  '<span class="f">数据源 <b>目标完成进度</b></span>'+
   '<span class="f">同环比截止 <b>11/'+D.meta.sp_days+'</b></span>'+
   '<span class="f">快照 <b>'+D.meta.snapshot+'</b></span>';
 document.getElementById('note').innerHTML=
@@ -243,8 +244,10 @@ document.getElementById('note').innerHTML=
   '数据源为周毛利表（货物收入 / 毛利额），周只有 7 天总量，跨月按重叠天数 ÷7 均摊到日，对比两边同法。<br>'+
   '<b>毛利率口径：</b>行内「26年毛利率达成」＝ 毛利额达成 ÷ 销售额达成（目标报表，与同行金额自洽）；「25年毛利率达成」＝ 去年同进度毛利率（周毛利表）。' +
   '两者源不同，<b>毛利率同比以上方 KPI 卡为准</b>（同源周毛利，11/1–11/'+D.meta.sp_days+' vs 去年同天）。<br>'+
-  '<b>两套毛利数的关系：</b>表内「毛利额达成」取 BI 目标报表（与目标同表、可逐行对账）；周毛利表同进度（11/1–11/'+D.meta.sp_days+'）为 ' +
-  nf(D.meta.sp_gp) + ' MXN。两者因统计时点与审计口径差约 ±5%，<b>同环比与时间进度一律按周毛利表周六口径</b>。<br>'+
+  '<b>数据源（唯一金额口径）：</b>本页所有金额与比率 —— 销售额 / 毛利额的<b>目标与达成、达成率、毛利率、目标占全组</b> —— 全部取自帆软 BI <b>「目标完成进度(权限版)」</b>，' +
+  '与你在 BI 里核对的是同一张表、同一次查询结果。<br>'+
+  '<b>同环比为什么另取一张表：</b>「目标完成进度」只有<b>「年月」粒度</b>（字段无日期列、控件只有 年月区间/年月/月份），拿它算同环比只能「部分月 vs 完整月」，会算出 −47% 这类失真值。' +
+  '故 4 个同环比列改用 BI <b>「1.3 周毛利监控明细(权限版)」</b>，<b>仅用于把期间切到同一天数</b>（11/1–'+D.meta.sp_days+' vs 上月同期 / 去年同天），不改变任何金额口径。<br>'+
   '<b>映射口径：</b>负责人归属严格按桌面「墨西哥 项目负责人.xlsx」' + D.meta.mapped + ' 条（按三级分类关联）；' +
   'BU / 产品组以 BI 在「拉美收纳宠户组」筛选下的结果为准' +
   (D.meta.conflict.length
