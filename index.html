@@ -214,9 +214,11 @@ function renderKpi(){
     card('毛利率', pf(k.gm_a), k.gm_a>=k.gm_t?'good':'bad',
          '目标毛利率 '+pf(k.gm_t)+'<br>'+
          '实际'+(k.gm_a>=k.gm_t?'高于':'低于')+'目标 <b>'+Math.abs((k.gm_a-k.gm_t)*100).toFixed(1)+'pp</b>')+
-    card('同比（基数 = 去年全月 × '+pf(m.sales_tp)+'）', sf(k.sp_yoy_sa), (k.sp_yoy_sa||0)>=0?'good':'bad',
-         '销售 <b>'+sf(k.sp_yoy_sa)+'</b> · 毛利 <b>'+sf(k.sp_yoy_ga)+'</b> · 毛利率 <b>'+pp(k.sp_yoy_gm_pp)+'</b><br>'+
-         '环比：销售 '+sf(k.sp_mom_sa)+' · 毛利 '+sf(k.sp_mom_ga));
+    card('同环比（基数 = 对比月全月 × '+pf(m.sales_tp)+'）',
+         '同比 '+sf(k.sp_yoy_sa)+' <small>/ 环比 '+sf(k.sp_mom_sa)+'</small>',
+         (k.sp_yoy_sa||0)>=0?'good':'bad',
+         '同比：销售 <b>'+sf(k.sp_yoy_sa)+'</b> · 毛利 <b>'+sf(k.sp_yoy_ga)+'</b> · 毛利率 <b>'+pp(k.sp_yoy_gm_pp)+'</b><br>'+
+         '环比：销售 <b>'+sf(k.sp_mom_sa)+'</b> · 毛利 <b>'+sf(k.sp_mom_ga)+'</b>');
 }
 function renderChips(){
   document.getElementById('groups').innerHTML=GROUPS.map(g=>
@@ -248,7 +250,10 @@ document.getElementById('note').innerHTML=
   '<b>基数（CNY 原值，便于与 BI 逐位核对）：</b>本期 2026-11 销售 <b>'+n2(D.meta.base_cur_rev)+'</b>、毛利 <b>'+n2(D.meta.base_cur_gp)+'</b>；'+
   '上月 2026-10 全月 销售 '+n2(D.meta.base_prev_rev)+'、毛利 '+n2(D.meta.base_prev_gp)+'；'+
   '去年 2025-11 全月 销售 '+n2(D.meta.base_ly_rev)+'、毛利 '+n2(D.meta.base_ly_gp)+'。'+
-  '例：销售额同比 =（'+n2(D.meta.base_cur_rev)+' − '+n2(D.meta.base_ly_rev)+'×'+pf(D.meta.sales_tp)+'）÷（'+n2(D.meta.base_ly_rev)+'×'+pf(D.meta.sales_tp)+'）。<br>'+
+  '例：销售额同比 =（'+n2(D.meta.base_cur_rev)+' − '+n2(D.meta.base_ly_rev)+'×'+pf(D.meta.sales_tp)+'）÷（'+n2(D.meta.base_ly_rev)+'×'+pf(D.meta.sales_tp)+'）。'+
+  '<b>环比算式：</b>销售 =（'+n2(D.meta.base_cur_rev)+' − '+n2(D.meta.base_prev_rev)+'×'+pf(D.meta.sales_tp)+'）÷（'+n2(D.meta.base_prev_rev)+'×'+pf(D.meta.sales_tp)+'）'+
+  ' = '+sf(D.kpi.sp_mom_sa)+'；毛利 =（'+n2(D.meta.base_cur_gp)+' − '+n2(D.meta.base_prev_gp)+'×'+pf(D.meta.gross_tp)+'）÷（'+n2(D.meta.base_prev_gp)+'×'+pf(D.meta.gross_tp)+'）'+
+  ' = '+sf(D.kpi.sp_mom_ga)+'。<br>'+
   '<b>毛利率口径：</b>「26年毛利率达成」= 本期毛利达成 ÷ 本期销售达成；「25年毛利率达成」= 去年同月<b>全月</b>毛利率（基数同乘时间进度，比例不变），两者之差即毛利率同比。<br>'+
   '<b>数据源：</b>全部金额与比率取自帆软 BI <b>「目标完成进度(权限版)」</b>，' + D.meta.total + ' 条明细；' +
   '同比基期 2025-11 全月由同一报表按月补拉（pull_yoy_full.py），与本期同源同口径。<br>'+
